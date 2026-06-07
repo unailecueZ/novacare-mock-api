@@ -1,0 +1,21 @@
+{
+  "name": "novacare-mock-api",
+  "version": "1.0.0",
+  "description": "Mock REST API simulating Epic EHR system for NovaCare Health",
+  "main": "api/verify-identity.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mock",
+    "api",
+    "ehr",
+    "healthcare",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
