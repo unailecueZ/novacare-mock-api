@@ -4,6 +4,8 @@
     { "source": "/init", "destination": "/api/init" },
     { "source": "/verify-identity", "destination": "/api/verify-identity" },
     { "source": "/patients/:id/appointments", "destination": "/api/patients/:id/appointments" },
+    { "source": "/patients/:id", "destination": "/api/patients/:id" },
+    { "source": "/patients", "destination": "/api/patients" },
     { "source": "/appointments/available-slots", "destination": "/api/appointments/available-slots" },
     { "source": "/appointments/:id", "destination": "/api/appointments/:id" },
     { "source": "/appointments", "destination": "/api/appointments" }

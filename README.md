@@ -34,6 +34,76 @@ Reset database to initial state. Restores original patients, appointments, and a
 
 ---
 
+## Patient Endpoints
+
+### GET /api/patients
+Get all patients in the system.
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "count": 3,
+  "patients": [
+    {
+      "id": "PAT-001",
+      "name": "Jane Smith",
+      "date_of_birth": "1985-03-15",
+      "email": "jane.smith@email.com",
+      "phone": "555-0101"
+    }
+  ]
+}
+```
+
+### GET /api/patients/:id
+Get details of a specific patient.
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "patient": {
+    "id": "PAT-001",
+    "name": "Jane Smith",
+    "date_of_birth": "1985-03-15",
+    "email": "jane.smith@email.com",
+    "phone": "555-0101"
+  }
+}
+```
+
+### POST /api/patients
+Create a new patient.
+
+**Request Body:**
+```json
+{
+  "name": "John Doe",
+  "date_of_birth": "1990-05-20",
+  "email": "john.doe@email.com",
+  "phone": "555-0199"
+}
+```
+
+**Response (201):**
+```json
+{
+  "success": true,
+  "message": "Patient created successfully",
+  "patient": {
+    "id": "PAT-004",
+    "name": "John Doe",
+    "date_of_birth": "1990-05-20",
+    "email": "john.doe@email.com",
+    "phone": "555-0199",
+    "created_at": "2026-06-09T10:30:00.000Z"
+  }
+}
+```
+
+---
+
 ### POST /api/verify-identity
 Verify patient identity with ID and date of birth.
 
