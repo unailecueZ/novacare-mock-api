@@ -4,14 +4,15 @@
     { "source": "/verify-identity", "destination": "/api/verify-identity" },
     { "source": "/patients/:id/appointments", "destination": "/api/patients/:id/appointments" },
     { "source": "/appointments/available-slots", "destination": "/api/appointments/available-slots" },
-    { "source": "/appointments/:id", "destination": "/api/appointments/:id" }
+    { "source": "/appointments/:id", "destination": "/api/appointments/:id" },
+    { "source": "/appointments", "destination": "/api/appointments" }
   ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, OPTIONS" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
       ]
     }

@@ -83,6 +83,83 @@ Get available appointment slots within a date range.
 }
 ```
 
+### GET /api/appointments
+Get all upcoming appointments across all patients.
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "count": 6,
+  "appointments": [
+    {
+      "appointment_id": "APT-101",
+      "patient_id": "PAT-001",
+      "date": "2026-06-15",
+      "time": "10:00 AM",
+      "provider": "Dr. Sarah Chen",
+      "type": "Annual Physical",
+      "location": "NovaCare Main Campus - Building A, Room 205",
+      "status": "confirmed"
+    }
+  ]
+}
+```
+
+### GET /api/appointments/:id
+Get details of a specific appointment.
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "appointment": {
+    "appointment_id": "APT-101",
+    "patient_id": "PAT-001",
+    "date": "2026-06-15",
+    "time": "10:00 AM",
+    "provider": "Dr. Sarah Chen",
+    "type": "Annual Physical",
+    "location": "NovaCare Main Campus - Building A, Room 205",
+    "status": "confirmed"
+  }
+}
+```
+
+### POST /api/appointments
+Create a new appointment.
+
+**Request Body:**
+```json
+{
+  "patient_id": "PAT-001",
+  "slot_id": "SLOT-001",
+  "appointment_type": "Annual Physical",
+  "notes": "Patient requested morning slot"
+}
+```
+
+**Response (201):**
+```json
+{
+  "success": true,
+  "message": "Appointment created successfully",
+  "appointment": {
+    "appointment_id": "APT-4521",
+    "patient_id": "PAT-001",
+    "patient_name": "Jane Smith",
+    "date": "2026-06-08",
+    "time": "09:00 AM",
+    "provider": "Dr. Sarah Chen",
+    "type": "Annual Physical",
+    "location": "NovaCare Main Campus - Building A, Room 205",
+    "status": "confirmed",
+    "notes": "Patient requested morning slot",
+    "created_at": "2026-06-08T10:30:00.000Z"
+  }
+}
+```
+
 ### PUT /api/appointments/:id
 Reschedule an appointment.
 
@@ -115,6 +192,27 @@ Reschedule an appointment.
     "reason": "Schedule conflict"
   },
   "message": "Appointment successfully rescheduled"
+}
+```
+
+### DELETE /api/appointments/:id
+Cancel an appointment (marks as cancelled, does not delete).
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "message": "Appointment cancelled successfully",
+  "cancelled_appointment": {
+    "appointment_id": "APT-101",
+    "patient_id": "PAT-001",
+    "date": "2026-06-15",
+    "time": "10:00 AM",
+    "provider": "Dr. Sarah Chen",
+    "type": "Annual Physical",
+    "status": "cancelled",
+    "cancelled_at": "2026-06-08T10:30:00.000Z"
+  }
 }
 ```
 
