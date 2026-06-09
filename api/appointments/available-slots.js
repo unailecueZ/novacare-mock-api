@@ -1,4 +1,4 @@
-const { availableSlots } = require('../../lib/data');
+const { getSlots } = require('../../lib/kv-helper');
 
 const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -6,7 +6,7 @@ const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
@@ -42,6 +42,7 @@ module.exports = (req, res) => {
     });
   }
 
+  const availableSlots = await getSlots();
   let filteredSlots = availableSlots.filter(slot => {
     const slotDate = new Date(slot.date);
     return slotDate >= fromDate && slotDate <= toDate;

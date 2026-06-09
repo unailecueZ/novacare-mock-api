@@ -1,6 +1,7 @@
 {
   "version": 2,
   "rewrites": [
+    { "source": "/init", "destination": "/api/init" },
     { "source": "/verify-identity", "destination": "/api/verify-identity" },
     { "source": "/patients/:id/appointments", "destination": "/api/patients/:id/appointments" },
     { "source": "/appointments/available-slots", "destination": "/api/appointments/available-slots" },

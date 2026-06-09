@@ -1,4 +1,4 @@
-const { patients, appointments } = require('../../../lib/data');
+const { getPatients, getAppointments } = require('../../../lib/kv-helper');
 
 const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -6,7 +6,7 @@ const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
@@ -23,6 +23,7 @@ module.exports = (req, res) => {
 
   const { id } = req.query;
 
+  const patients = await getPatients();
   const patient = patients.find(p => p.id === id);
 
   if (!patient) {
@@ -33,6 +34,7 @@ module.exports = (req, res) => {
     });
   }
 
+  const appointments = await getAppointments();
   const patientAppointments = appointments.filter(apt => apt.patientId === id);
 
   const today = new Date();

@@ -1,4 +1,4 @@
-const { appointments, availableSlots } = require('../../lib/data');
+const { getAppointments, getSlots, updateAppointment, removeSlot } = require('../../lib/kv-helper');
 
 const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -6,7 +6,7 @@ const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
@@ -23,6 +23,7 @@ module.exports = (req, res) => {
     });
   }
 
+  const appointments = await getAppointments();
   const appointment = appointments.find(apt => apt.appointmentId === id);
 
   if (!appointment) {
@@ -50,6 +51,11 @@ module.exports = (req, res) => {
   }
 
   if (req.method === 'DELETE') {
+    await updateAppointment(id, {
+      status: 'cancelled',
+      cancelled_at: new Date().toISOString()
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Appointment cancelled successfully',
@@ -90,7 +96,8 @@ module.exports = (req, res) => {
   let updatedLocation = appointment.location;
 
   if (slot_id) {
-    const slot = availableSlots.find(s => s.slotId === slot_id);
+    const slots = await getSlots();
+    const slot = slots.find(s => s.slotId === slot_id);
     if (!slot) {
       return res.status(400).json({
         success: false,
@@ -102,10 +109,21 @@ module.exports = (req, res) => {
     updatedTime = slot.time;
     updatedProvider = slot.provider;
     updatedLocation = slot.location;
+    await removeSlot(slot_id);
   } else {
     if (new_date) updatedDate = new_date;
     if (new_time) updatedTime = new_time;
   }
+
+  await updateAppointment(id, {
+    date: updatedDate,
+    time: updatedTime,
+    provider: updatedProvider,
+    location: updatedLocation,
+    status: 'rescheduled',
+    reschedule_reason: reason || null,
+    rescheduled_at: new Date().toISOString()
+  });
 
   const confirmationNumber = `CONF-${Date.now().toString().slice(-8)}`;
 

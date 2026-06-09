@@ -1,4 +1,4 @@
-const { appointments, patients, availableSlots } = require('../../lib/data');
+const { getAppointments, getPatients, getSlots, addAppointment, removeSlot } = require('../../lib/kv-helper');
 
 const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -6,7 +6,7 @@ const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
@@ -14,6 +14,7 @@ module.exports = (req, res) => {
   }
 
   if (req.method === 'GET') {
+    const appointments = await getAppointments();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -49,6 +50,7 @@ module.exports = (req, res) => {
       });
     }
 
+    const patients = await getPatients();
     const patient = patients.find(p => p.id === patient_id);
     if (!patient) {
       return res.status(404).json({
@@ -58,7 +60,8 @@ module.exports = (req, res) => {
       });
     }
 
-    const slot = availableSlots.find(s => s.slotId === slot_id);
+    const slots = await getSlots();
+    const slot = slots.find(s => s.slotId === slot_id);
     if (!slot) {
       return res.status(404).json({
         success: false,
@@ -70,9 +73,8 @@ module.exports = (req, res) => {
     const newAppointmentId = `APT-${Math.floor(Math.random() * 9000) + 1000}`;
 
     const newAppointment = {
-      appointment_id: newAppointmentId,
-      patient_id: patient_id,
-      patient_name: patient.name,
+      appointmentId: newAppointmentId,
+      patientId: patient_id,
       date: slot.date,
       time: slot.time,
       provider: slot.provider,
@@ -83,10 +85,25 @@ module.exports = (req, res) => {
       created_at: new Date().toISOString()
     };
 
+    await addAppointment(newAppointment);
+    await removeSlot(slot_id);
+
     return res.status(201).json({
       success: true,
       message: 'Appointment created successfully',
-      appointment: newAppointment
+      appointment: {
+        appointment_id: newAppointment.appointmentId,
+        patient_id: newAppointment.patientId,
+        patient_name: patient.name,
+        date: newAppointment.date,
+        time: newAppointment.time,
+        provider: newAppointment.provider,
+        type: newAppointment.type,
+        location: newAppointment.location,
+        status: newAppointment.status,
+        notes: newAppointment.notes,
+        created_at: newAppointment.created_at
+      }
     });
   }
 

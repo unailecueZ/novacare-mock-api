@@ -1,8 +1,38 @@
 # NovaCare Mock API
 
-Mock REST API simulating an Epic EHR system for NovaCare Health. Built with Vercel serverless functions for use in Zendesk AI deployment exercises.
+Mock REST API simulating an Epic EHR system for NovaCare Health. Built with Vercel serverless functions and Vercel KV (Redis) for persistent, editable data.
+
+## Features
+
+- ✅ **Persistent data** - Uses Vercel KV to store appointments, patients, and slots
+- ✅ **Fully editable** - Create, read, update, and cancel appointments
+- ✅ **Reset capability** - `/api/init` endpoint to restore original data
+- ✅ **Real behavior** - When you book a slot, it's removed from available slots
+- ✅ **CORS enabled** - Works with Zendesk and other browser-based integrations
+
+## Setup
+
+See [VERCEL_KV_SETUP.md](./VERCEL_KV_SETUP.md) for detailed instructions on configuring Vercel KV storage.
 
 ## Endpoints
+
+### POST /api/init
+Reset database to initial state. Restores original patients, appointments, and available slots.
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "message": "Database reset to initial state",
+  "details": {
+    "patients": 3,
+    "appointments": 6,
+    "available_slots": 10
+  }
+}
+```
+
+---
 
 ### POST /api/verify-identity
 Verify patient identity with ID and date of birth.
