@@ -1,6 +1,6 @@
 {
   "name": "novacare-mock-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mock REST API simulating Epic EHR system for NovaCare Health",
   "main": "api/verify-identity.js",
   "scripts": {
